@@ -1,7 +1,9 @@
 import {
   BarChart3,
+  Check,
+  ChevronsUpDown,
 } from 'lucide-react'
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { NumberField } from '../components'
 import { ThemedSelect } from '../ThemedSelect'
 import {
@@ -62,13 +64,25 @@ function UpgradeLevelPicker({
   onChange: (level: number) => void
 }) {
   const [draft, setDraft] = useState(String(value))
-  const listId = useId()
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const labelId = useId()
+  const listboxId = useId()
   const min = levels[0] ?? 110
   const max = levels.at(-1) ?? 175
 
   useEffect(() => {
     setDraft(String(value))
   }, [value])
+
+  useEffect(() => {
+    if (!open) return
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
+    }
+    document.addEventListener('pointerdown', closeOnOutsideClick)
+    return () => document.removeEventListener('pointerdown', closeOnOutsideClick)
+  }, [open])
 
   const commit = (raw: string) => {
     const level = Number(raw)
@@ -79,17 +93,23 @@ function UpgradeLevelPicker({
     setDraft(String(value))
   }
 
+  const choose = (level: number) => {
+    setDraft(String(level))
+    onChange(level)
+    setOpen(false)
+  }
+
   return (
-    <label className="field upgrade-level-picker">
-      <span>{label}</span>
+    <div className={open ? 'field upgrade-level-picker open' : 'field upgrade-level-picker'} ref={rootRef}>
+      <span id={labelId}>{label}</span>
       <div className="input-shell">
         <input
           type="number"
           min={min}
           max={max}
           step="1"
-          list={listId}
           value={draft}
+          aria-labelledby={labelId}
           onChange={(event) => {
             const raw = event.target.value
             setDraft(raw)
@@ -97,13 +117,41 @@ function UpgradeLevelPicker({
             if (Number.isInteger(level) && levels.includes(level)) onChange(level)
           }}
           onBlur={() => commit(draft)}
+          onKeyDown={(event) => {
+            if (event.key === 'ArrowDown') setOpen(true)
+            if (event.key === 'Escape') setOpen(false)
+          }}
         />
         <b aria-hidden="true">级</b>
+        <button
+          type="button"
+          className="upgrade-level-picker-toggle"
+          aria-label={`选择${label}`}
+          aria-expanded={open}
+          aria-controls={listboxId}
+          onClick={() => setOpen((current) => !current)}
+        >
+          <ChevronsUpDown size={16} aria-hidden="true" />
+        </button>
       </div>
-      <datalist id={listId}>
-        {levels.map((level) => <option key={level} value={level}>{level} 级</option>)}
-      </datalist>
-    </label>
+      {open && (
+        <div className="themed-select-popover upgrade-level-picker-popover" id={listboxId} role="listbox" aria-labelledby={labelId}>
+          {levels.map((level) => (
+            <button
+              type="button"
+              role="option"
+              aria-selected={level === value}
+              className="upgrade-level-picker-option"
+              key={level}
+              onClick={() => choose(level)}
+            >
+              <span>{level} 级</span>
+              {level === value && <Check size={16} aria-hidden="true" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 

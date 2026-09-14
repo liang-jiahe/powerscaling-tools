@@ -83,6 +83,41 @@
 .upgrade-form-card .themed-select-popover { z-index: 12; }
 .upgrade-form-card .field > span { font-size: 13px; }
 .upgrade-form-card .input-shell b { flex: none; white-space: nowrap; font-size: 12px; }
+.upgrade-level-picker { position: relative; }
+.upgrade-level-picker.open { z-index: 80; }
+.upgrade-level-picker .input-shell { padding-right: 0; }
+.upgrade-level-picker-toggle {
+  width: 38px;
+  height: 100%;
+  flex: none;
+  border: 0;
+  border-left: 1px solid #d7ded8;
+  color: #60736a;
+  background: transparent;
+  cursor: pointer;
+}
+.upgrade-level-picker-toggle:hover { color: var(--primary-deep); background: var(--mint-soft); }
+.upgrade-level-picker.open .upgrade-level-picker-toggle { color: var(--primary-deep); background: var(--mint-soft); }
+.upgrade-level-picker-popover { width: 100%; min-width: 0; }
+.upgrade-level-picker-option {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  border-radius: 10px;
+  color: #39463f;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+.upgrade-level-picker-option:hover,
+.upgrade-level-picker-option[aria-selected="true"] { color: var(--primary-deep); background: var(--mint-soft); }
+.upgrade-level-picker-option svg { color: var(--primary); }
 .upgrade-field-help { margin: -5px 0 13px; color: var(--muted); font-size: 13px; line-height: 1.6; }
 .upgrade-divider { height: 1px; margin: 4px 0 16px; background: linear-gradient(90deg, transparent, var(--line), transparent); }
 .upgrade-toggle {
