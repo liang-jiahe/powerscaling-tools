@@ -179,7 +179,7 @@
 .upgrade-summary strong small { margin-left: 5px; font-size: 14px; }
 .upgrade-summary strong.date { font-family: "SimSun", "宋体", "Songti SC", "STSong", serif; font-size: 19px; font-weight: 800; }
 .upgrade-summary p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
-.upgrade-detail-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 10px; }
+.upgrade-detail-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 10px; margin-top: 20px; }
 .upgrade-detail-card,
 .upgrade-table-card {
   padding: 16px;
