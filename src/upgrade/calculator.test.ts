@@ -95,6 +95,15 @@ describe('逐日升级推演', () => {
     expect(shuraOnly.preciseDays).toBeLessThan(mixed.preciseDays)
   })
 
+  it('精英 A + 修罗模式先扫 120 体力精英，再扫修罗', () => {
+    const mixed = simulateUpgrade({ ...baseConfig, staminaBodies: 3 })
+    const eliteA = simulateUpgrade({ ...baseConfig, staminaBodies: 3 }, undefined, 'eliteAThenShura')
+    const shuraOnly = simulateUpgrade({ ...baseConfig, staminaBodies: 3 }, undefined, 'shuraOnly')
+    expect(eliteA.firstDay).toMatchObject({ eliteRuns: 12, shuraRuns: 47, remainingStamina: 0 })
+    expect(eliteA.preciseDays).toBeLessThan(mixed.preciseDays)
+    expect(eliteA.preciseDays).toBeGreaterThan(shuraOnly.preciseDays)
+  })
+
   it('其他每周体力按七日平均计入每日基础体力', () => {
     const result = simulateUpgrade({ ...baseConfig, otherWeeklyStamina: 500 })
     expect(result.baseStamina).toBeCloseTo(590 + 500 / 7)

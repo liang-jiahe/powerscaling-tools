@@ -279,7 +279,7 @@ type LegacyUpgradeConfig = Omit<UpgradeConfig, 'staminaBodies' | 'otherWeeklySta
   otherWeeklyStamina?: number
 }
 
-export type UpgradeDungeonStrategy = 'eliteThenShura' | 'shuraOnly'
+export type UpgradeDungeonStrategy = 'eliteThenShura' | 'eliteAThenShura' | 'shuraOnly'
 
 export function simulateUpgrade(
   config: LegacyUpgradeConfig,
@@ -315,13 +315,14 @@ export function simulateUpgrade(
 
   const totals = { dungeonExp: 0, activeExp: 0, bountyExp: 0, eliteRuns: 0, shuraRuns: 0 }
   const averageDailyStamina = baseStamina
+  const eliteStaminaLimit = dungeonStrategy === 'eliteAThenShura' ? 120 : DAILY_ELITE_STAMINA_LIMIT
   const preciseDays = milestones.reduce((total, milestone) => {
     const row = getUpgradeLevelData(milestone.fromLevel)
     if (!row) throw new Error(`缺少 ${milestone.fromLevel} 级收益数据。`)
     const dungeonExp = dungeonStrategy === 'shuraOnly'
       ? (averageDailyStamina / 10) * row.shuraExp
-      : (Math.min(averageDailyStamina, DAILY_ELITE_STAMINA_LIMIT) / 10) * row.eliteExp +
-        (Math.max(0, averageDailyStamina - DAILY_ELITE_STAMINA_LIMIT) / 10) * row.shuraExp
+      : (Math.min(averageDailyStamina, eliteStaminaLimit) / 10) * row.eliteExp +
+        (Math.max(0, averageDailyStamina - eliteStaminaLimit) / 10) * row.shuraExp
     const bountyExp = calculateBountyExperience(row, normalized.vipLevel, normalized.superKage)
     return total + milestone.remaining / (dungeonExp + row.activeTotal + bountyExp)
   }, 0)
@@ -368,8 +369,8 @@ export function simulateUpgrade(
     let activeExpToday = 0
     let bountyExpToday = 0
 
-    if (dungeonStrategy === 'eliteThenShura') {
-      while (level < normalized.targetLevel && eliteRunsToday < DAILY_ELITE_STAMINA_LIMIT / 10 && stamina >= 10) {
+    if (dungeonStrategy !== 'shuraOnly') {
+      while (level < normalized.targetLevel && eliteRunsToday < eliteStaminaLimit / 10 && stamina >= 10) {
         const row = getUpgradeLevelData(level)
         if (!row) throw new Error(`缺少 ${level} 级精英副本经验。`)
         const reward = row.eliteExp
