@@ -159,7 +159,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               onChange={(currentExp) => update('currentExp', currentExp)}
             />
             <p className="upgrade-field-help">
-              本级上限：{currentThreshold ? formatInteger(currentThreshold) : '已满级'}；清空时按 0 计算。
+              本级上限：{currentThreshold ? formatInteger(currentThreshold) : '已满级'}。
             </p>
 
             <div className="upgrade-divider" />
@@ -185,7 +185,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
             </div>
 
             <label className="upgrade-toggle">
-              <span><b>超影特权</b><small>拉面体力由 150 提升至 300</small></span>
+              <span><b>超影特权</b></span>
               <input
                 type="checkbox"
                 checked={form.superKage}
@@ -208,7 +208,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               onChange={(otherWeeklyStamina) => update('otherWeeklyStamina', otherWeeklyStamina)}
             />
             <p className="upgrade-field-help">
-              V 特权、心悦和活动等其他来源；按每周总量 ÷ 7 平均计入每日体力。
+              V 特权、心悦和活动等其他来源。
             </p>
 
             <div className="upgrade-stamina-strip">
@@ -258,16 +258,11 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               <strong>{formatInteger(remainingExperience)}</strong>
               <p>已抵扣本级现有经验</p>
             </article>
-            <article className="upgrade-summary pink">
-              <span>每日基础体力</span>
-              <strong>{formatInteger(result.baseStamina)}</strong>
-              <p>{submitted.otherWeeklyStamina ? '已含其他每周体力日均' : '不含其他每周体力'}</p>
-            </article>
           </div>
 
           <div className="upgrade-rule">
             <Sparkles size={18} />
-            <p>每日按 <b>精英 → 修罗 → 活跃合计 → 丰饶</b> 的顺序计算，升级后立即切换新等级经验。</p>
+            <p>每日按 <b>精英 → 修罗 → 活跃合计 → 丰饶</b> 的顺序计算。</p>
           </div>
 
           <div className="upgrade-detail-grid">
@@ -308,7 +303,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
           <details className="upgrade-table-card">
             <summary className="upgrade-card-title">
               <div><small>逐级里程碑</small><h3>升级进度表</h3></div>
-              <span>{result.milestones.length} 个阶段 · 点击展开</span>
+              <span aria-label="点击展开" />
             </summary>
             <div className="upgrade-table-scroll">
               <table>

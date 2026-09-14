@@ -4,6 +4,7 @@
   padding: 28px 0 60px;
   color: var(--charcoal);
 }
+.upgrade-workspace:focus { outline: none; }
 
 .upgrade-hero {
   min-height: 142px;
@@ -226,7 +227,6 @@
 }
 .upgrade-summary.mint { background: var(--mint-soft); }
 .upgrade-summary.yellow { background: #fff9d8; border-color: #eee3ae; }
-.upgrade-summary.pink { background: #fff0f5; border-color: #f0d4dd; }
 .upgrade-summary > span { display: block; color: var(--muted); font-size: 13px; font-weight: 800; }
 .upgrade-summary strong {
   display: block;
