@@ -125,7 +125,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
           <h1>升级时间计算</h1>
           <p>把每日体力、精英与修罗副本、活跃和丰饶收益逐日推演，算出预计升级日期。</p>
           <div className="upgrade-hero-pills">
-            <span>140—175 级</span><span>逐日推演</span><span>本地计算</span>
+            <span>110—175 级</span><span>逐日推演</span><span>本地计算</span>
           </div>
         </div>
         <div className="upgrade-hero-mark" aria-hidden="true">
@@ -345,17 +345,18 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
       <details className="upgrade-reference" id="upgrade-reference">
         <summary>
-          <span>查看 140—175 级经验表</span>
+          <span>查看 110—175 级经验表</span>
           <b aria-hidden="true">＋</b>
         </summary>
         <div className="upgrade-table-scroll">
           <table>
-            <thead><tr><th>等级</th><th>升级所需经验</th><th>V10 以下丰饶</th><th>V10—V13 丰饶</th><th>V14—V15 丰饶</th><th>活跃合计</th><th>精英副本</th><th>修罗副本</th></tr></thead>
+            <thead><tr><th>等级</th><th>升级所需经验</th><th>非超影丰饶</th><th>超影 V10 以下</th><th>超影 V10—V13</th><th>超影 V14—V15</th><th>活跃合计</th><th>精英副本（每 10 体）</th><th>修罗副本（每 10 体）</th></tr></thead>
             <tbody>
               {UPGRADE_LEVEL_DATA.map((row) => (
                 <tr key={row.level}>
                   <td><b>{row.level}</b></td>
                   <td>{row.expNeeded ? formatInteger(row.expNeeded) : '满级'}</td>
+                  <td>{formatInteger(row.bountyBase)}</td>
                   <td>{formatInteger(row.bountyV6)}</td>
                   <td>{formatInteger(row.bountyV10)}</td>
                   <td>{formatInteger(row.bountyV14)}</td>
@@ -371,7 +372,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
       <div className="upgrade-footnote">
         <BookOpenText size={16} />
-        <p>140—170 级数据来自参考页；171—175 级按已知增量推算，待游戏实测数据发布后可校准。结果仅供冲级规划参考，所有计算均在浏览器本地完成。</p>
+        <p>110—170 级经验与收益依据截图表整理；丰饶关闭超影时使用基础经验，开启后按 V 档位倍率计算；副本经验不受超影影响。171—175 级仍为推算数据。</p>
         <Gift size={16} />
       </div>
     </div>

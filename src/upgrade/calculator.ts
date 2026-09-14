@@ -1,6 +1,7 @@
 export interface UpgradeLevelRow {
   level: number
   expNeeded: number | null
+  bountyBase: number
   bountyV6: number
   bountyV10: number
   bountyV14: number
@@ -69,7 +70,7 @@ export interface UpgradeResult {
   }
 }
 
-export const UPGRADE_LEVEL_DATA: readonly UpgradeLevelRow[] = [
+const CURRENT_UPGRADE_LEVEL_DATA: readonly Omit<UpgradeLevelRow, 'bountyBase'>[] = [
   { level: 140, expNeeded: 10035498, bountyV6: 104564.9208, bountyV10: 112033.9, bountyV14: 119502.8792, activeTotal: 75073.0752, eliteExp: 1607, shuraExp: 2142.131 },
   { level: 141, expNeeded: 11035498, bountyV6: 106555.3698, bountyV10: 114166.525, bountyV14: 121777.6802, activeTotal: 76502.1312, eliteExp: 1668, shuraExp: 2223.444 },
   { level: 142, expNeeded: 12035498, bountyV6: 108545.8188, bountyV10: 116299.15, bountyV14: 124052.4812, activeTotal: 77931.1872, eliteExp: 1729, shuraExp: 2304.757 },
@@ -107,6 +108,80 @@ export const UPGRADE_LEVEL_DATA: readonly UpgradeLevelRow[] = [
   { level: 174, expNeeded: 39895458, bountyV6: 157709.9091, bountyV10: 168974.9875, bountyV14: 180240.0659, activeTotal: 113228.8704, eliteExp: 2858, shuraExp: 3810.214, isEstimated: true },
   { level: 175, expNeeded: null, bountyV6: 0, bountyV10: 0, bountyV14: 0, activeTotal: 0, eliteExp: 0, shuraExp: 0, isEstimated: true },
 ]
+
+const SCREENSHOT_BASE_BOUNTY: Record<number, number> = {
+  110: 63789, 111: 64074, 112: 64453, 113: 64737, 114: 65069, 115: 65353, 116: 65638, 117: 66017, 118: 66301, 119: 66633,
+  120: 66917, 121: 67296, 122: 67628, 123: 67912, 124: 68244, 125: 68576, 126: 68908, 127: 69192, 128: 69571, 129: 69903,
+  130: 70235, 131: 70566, 132: 70851, 133: 71182, 134: 71609, 135: 71893, 136: 72225, 137: 72509, 138: 72936, 139: 73268,
+  140: 74310, 141: 75827, 142: 77533, 143: 78955, 144: 80566, 145: 82936, 146: 85305, 147: 87675, 148: 90045, 149: 92414,
+  150: 94784, 151: 97153, 152: 99523, 153: 101893, 154: 104262, 155: 106632, 156: 111608, 157: 111703, 158: 111798, 159: 111892,
+  160: 111987, 161: 112034, 162: 112082, 163: 112129, 164: 112177, 165: 112224, 166: 112271, 167: 112319, 168: 112366, 169: 112414,
+  170: 112461,
+}
+
+const createScreenshotRow = (level: number, expNeeded: number, activeTotal: number, eliteExpPerRun: number): Omit<UpgradeLevelRow, 'bountyBase'> => {
+  const bountyBase = SCREENSHOT_BASE_BOUNTY[level]
+  // 截图的精英数值为单次 5 体力；推演沿用每 10 体力的内部口径。
+  const eliteExp = eliteExpPerRun * 2
+  return {
+    level,
+    expNeeded,
+    bountyV6: bountyBase * 1.4,
+    bountyV10: bountyBase * 1.5,
+    bountyV14: bountyBase * 1.6,
+    activeTotal,
+    eliteExp,
+    shuraExp: eliteExp * 1.333,
+  }
+}
+
+const SCREENSHOT_110_139_DATA = [
+  createScreenshotRow(110, 983427, 64135, 673), createScreenshotRow(111, 1062630, 64413, 676), createScreenshotRow(112, 1142706, 64801, 680),
+  createScreenshotRow(113, 1223613, 65087, 683), createScreenshotRow(114, 1305301, 65419, 686), createScreenshotRow(115, 1387799, 65721, 689),
+  createScreenshotRow(116, 1471047, 66006, 692), createScreenshotRow(117, 1555149, 66369, 696), createScreenshotRow(118, 1639930, 66655, 699),
+  createScreenshotRow(119, 1725438, 67006, 703), createScreenshotRow(120, 1512896, 67290, 706), createScreenshotRow(121, 1597826, 67654, 710),
+  createScreenshotRow(122, 1597826, 67987, 713), createScreenshotRow(123, 1597826, 68271, 716), createScreenshotRow(124, 1498874, 68621, 720),
+  createScreenshotRow(125, 2196307, 68937, 723), createScreenshotRow(126, 2298096, 69270, 727), createScreenshotRow(127, 2399884, 69555, 730),
+  createScreenshotRow(128, 2501672, 69953, 734), createScreenshotRow(129, 2603461, 70268, 737), createScreenshotRow(130, 3803461, 70601, 741),
+  createScreenshotRow(131, 4903461, 70935, 744), createScreenshotRow(132, 4903461, 71237, 747), createScreenshotRow(133, 4903461, 71569, 751),
+  createScreenshotRow(134, 4903461, 71981, 755), createScreenshotRow(135, 5603461, 72266, 758), createScreenshotRow(136, 6203461, 72616, 762),
+  createScreenshotRow(137, 7903461, 72901, 765), createScreenshotRow(138, 8403461, 73312, 769), createScreenshotRow(139, 9303461, 73644, 773),
+] as const
+
+const SCREENSHOT_140_170_DUNGEON_DATA: Record<number, { activeTotal: number; eliteExp: number; shuraExp: number; expNeeded?: number }> = {
+  140: { activeTotal: 75074, eliteExp: 1576, shuraExp: 2100 }, 141: { activeTotal: 76217, eliteExp: 1600, shuraExp: 2130 },
+  142: { activeTotal: 77914, eliteExp: 1636, shuraExp: 2180 }, 143: { activeTotal: 79342, eliteExp: 1666, shuraExp: 2220 },
+  144: { activeTotal: 80980, eliteExp: 1700, shuraExp: 2266 }, 145: { activeTotal: 83362, eliteExp: 1750, shuraExp: 2322 },
+  146: { activeTotal: 85724, eliteExp: 1800, shuraExp: 2399 }, 147: { activeTotal: 88105, eliteExp: 1850, shuraExp: 2466 },
+  148: { activeTotal: 90507, eliteExp: 1900, shuraExp: 2532 }, 149: { activeTotal: 92889, eliteExp: 1950, shuraExp: 2599 },
+  150: { activeTotal: 95271, eliteExp: 2000, shuraExp: 2666 }, 151: { activeTotal: 97654, eliteExp: 2050, shuraExp: 2732 },
+  152: { activeTotal: 100035, eliteExp: 2100, shuraExp: 2799 }, 153: { activeTotal: 102416, eliteExp: 2150, shuraExp: 2865 },
+  154: { activeTotal: 104798, eliteExp: 2200, shuraExp: 2932 }, 155: { activeTotal: 107180, eliteExp: 2250, shuraExp: 2999, expNeeded: 21095457 },
+  156: { activeTotal: 112182, eliteExp: 2354, shuraExp: 3139 }, 157: { activeTotal: 112278, eliteExp: 2356, shuraExp: 3141 },
+  158: { activeTotal: 112372, eliteExp: 2358, shuraExp: 3144 }, 159: { activeTotal: 112468, eliteExp: 2360, shuraExp: 3147 },
+  160: { activeTotal: 112564, eliteExp: 2362, shuraExp: 3149 }, 161: { activeTotal: 112611, eliteExp: 2364, shuraExp: 3151 },
+  162: { activeTotal: 112658, eliteExp: 2364, shuraExp: 3152 }, 163: { activeTotal: 112706, eliteExp: 2366, shuraExp: 3154 },
+  164: { activeTotal: 112753, eliteExp: 2366, shuraExp: 3155 }, 165: { activeTotal: 112801, eliteExp: 2368, shuraExp: 3156 },
+  166: { activeTotal: 112848, eliteExp: 2368, shuraExp: 3157 }, 167: { activeTotal: 112897, eliteExp: 2370, shuraExp: 3159 },
+  168: { activeTotal: 112944, eliteExp: 2370, shuraExp: 3160 }, 169: { activeTotal: 112991, eliteExp: 2372, shuraExp: 3161 },
+  170: { activeTotal: 113039, eliteExp: 2372, shuraExp: 3163 },
+}
+
+export const UPGRADE_LEVEL_DATA: readonly UpgradeLevelRow[] = [
+  ...SCREENSHOT_110_139_DATA,
+  ...CURRENT_UPGRADE_LEVEL_DATA,
+].map((row) => {
+  const bountyBase = SCREENSHOT_BASE_BOUNTY[row.level] ?? row.bountyV14 / 1.6
+  const screenshotDungeon = SCREENSHOT_140_170_DUNGEON_DATA[row.level]
+  return {
+    ...row,
+    ...(screenshotDungeon ?? {}),
+    bountyBase,
+    bountyV6: bountyBase * 1.4,
+    bountyV10: bountyBase * 1.5,
+    bountyV14: bountyBase * 1.6,
+  }
+})
 
 const LEVEL_MAP = new Map(UPGRADE_LEVEL_DATA.map((row) => [row.level, row]))
 const VALID_STAMINA_BODIES = new Set<number>([0, 3, 6, 9])
@@ -148,7 +223,7 @@ function addDays(date: Date, days: number) {
 
 function validateLevels(currentLevel: number, targetLevel: number) {
   if (!LEVEL_MAP.has(currentLevel) || !LEVEL_MAP.has(targetLevel)) {
-    throw new Error('等级必须在 140 到 175 之间。')
+    throw new Error('等级必须在 110 到 175 之间。')
   }
   if (targetLevel < currentLevel) throw new Error('目标等级不能低于当前等级。')
 }
@@ -193,9 +268,10 @@ function validateConfig(config: UpgradeConfig) {
   return parseUpgradeDate(config.startDate)
 }
 
-function calculateBountyExperience(row: UpgradeLevelRow, vipLevel: number) {
-  const vipBounty = vipLevel >= 14 ? row.bountyV14 : vipLevel >= 10 ? row.bountyV10 : row.bountyV6
-  return Math.round(vipBounty)
+function calculateBountyExperience(row: UpgradeLevelRow, vipLevel: number, superKage: boolean) {
+  if (!superKage) return Math.round(row.bountyBase)
+  const multiplier = vipLevel >= 14 ? 1.6 : vipLevel >= 10 ? 1.5 : 1.4
+  return Math.round(row.bountyBase * multiplier)
 }
 
 type LegacyUpgradeConfig = Omit<UpgradeConfig, 'staminaBodies' | 'otherWeeklyStamina'> & {
@@ -239,7 +315,7 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
     const eliteStamina = Math.min(averageDailyStamina, DAILY_ELITE_STAMINA_LIMIT)
     const shuraStamina = Math.max(0, averageDailyStamina - DAILY_ELITE_STAMINA_LIMIT)
     const dungeonExp = (eliteStamina / 10) * row.eliteExp + (shuraStamina / 10) * row.shuraExp
-    const bountyExp = calculateBountyExperience(row, normalized.vipLevel)
+    const bountyExp = calculateBountyExperience(row, normalized.vipLevel, normalized.superKage)
     return total + milestone.remaining / (dungeonExp + row.activeTotal + bountyExp)
   }, 0)
 
@@ -320,7 +396,7 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
     if (level < normalized.targetLevel) {
       const row = getUpgradeLevelData(level)
       if (!row) throw new Error(`缺少 ${level} 级丰饶经验。`)
-      bountyExpToday = calculateBountyExperience(row, normalized.vipLevel)
+      bountyExpToday = calculateBountyExperience(row, normalized.vipLevel, normalized.superKage)
       totals.bountyExp += bountyExpToday
       applyExperience(bountyExpToday, date)
     }

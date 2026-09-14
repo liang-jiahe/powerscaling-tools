@@ -87,7 +87,7 @@ describe('多板块导航与状态', () => {
     expect(screen.getByRole('heading', { name: '升级时间计算' })).toBeVisible()
     expect(screen.getByText('冲级路线')).toBeVisible()
     expect(screen.getByText('升级进度表')).toBeVisible()
-    expect(screen.getByText('查看 140—175 级经验表')).toBeVisible()
+    expect(screen.getByText('查看 110—175 级经验表')).toBeVisible()
   })
 
   it('仅启用 PDF 文本导出，其他工具按钮保持禁用', () => {
