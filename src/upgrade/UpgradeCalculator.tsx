@@ -40,9 +40,6 @@ const formatDays = (value: number) =>
     Number.isFinite(value) ? value : 0,
   )
 
-const vipTierLabel = (level: number) =>
-  level >= 14 ? 'V14—V15' : level >= 10 ? 'V10—V13' : 'V10 以下'
-
 const createDefaultConfig = (): UpgradeConfig => ({
   currentLevel: 140,
   currentExp: 0,
@@ -197,13 +194,6 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
         </aside>
 
         <section className="upgrade-results" id="upgrade-results" aria-live="polite">
-          <div className="upgrade-results-head">
-            <div className="upgrade-config-chip">
-              {vipTierLabel(submitted.vipLevel)} · {submitted.superKage ? '超影' : '非超影'} ·
-              {submitted.staminaBodies === 0 ? ' 不买体' : ` ${submitted.staminaBodies} 体`}
-            </div>
-          </div>
-
           <div className="upgrade-summary-grid">
             <article className="upgrade-summary primary">
               <span>预计需要</span>
