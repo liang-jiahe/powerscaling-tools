@@ -58,7 +58,7 @@
   grid-template-columns: minmax(380px, 430px) minmax(0, 1fr);
   gap: 18px;
   margin-top: 18px;
-  align-items: start;
+  align-items: stretch;
 }
 .upgrade-form-card,
 .upgrade-results,
