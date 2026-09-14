@@ -179,21 +179,6 @@
 .upgrade-summary strong small { margin-left: 5px; font-size: 14px; }
 .upgrade-summary strong.date { font-family: "SimSun", "宋体", "Songti SC", "STSong", serif; font-size: 19px; font-weight: 800; }
 .upgrade-summary p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
-.upgrade-rule {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 13px 0;
-  padding: 12px 14px;
-  border: 1px dashed #d4ded7;
-  border-radius: 14px;
-  color: var(--primary);
-  background: linear-gradient(90deg, var(--mint-soft), #fffdf4);
-}
-.upgrade-rule svg { flex: none; }
-.upgrade-rule p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
-.upgrade-rule b { color: var(--primary-deep); }
-
 .upgrade-detail-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 10px; }
 .upgrade-detail-card,
 .upgrade-table-card {

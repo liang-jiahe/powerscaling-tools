@@ -1,6 +1,5 @@
 import {
   BarChart3,
-  Sparkles,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { NumberField } from '../components'
@@ -218,11 +217,6 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               <span>尚需经验</span>
               <strong>{formatInteger(remainingExperience)}</strong>
             </article>
-          </div>
-
-          <div className="upgrade-rule">
-            <Sparkles size={18} />
-            <p>每日按 <b>精英 → 修罗 → 活跃合计 → 丰饶</b> 的顺序计算。</p>
           </div>
 
           <div className="upgrade-detail-grid">
