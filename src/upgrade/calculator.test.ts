@@ -86,6 +86,14 @@ describe('逐日升级推演', () => {
     expect(simulateUpgrade({ ...baseConfig, superKage: true }).baseStamina).toBe(baseConfig.staminaBodies * 50 + 590)
   })
 
+  it('关闭超影后立即按非超影体力计算，所需天数更长', () => {
+    const enabled = simulateUpgrade({ ...baseConfig, currentLevel: 150, targetLevel: 151, vipLevel: 14, superKage: true, otherWeeklyStamina: 500 })
+    const disabled = simulateUpgrade({ ...baseConfig, currentLevel: 150, targetLevel: 151, vipLevel: 14, superKage: false, otherWeeklyStamina: 500 })
+    expect(enabled.baseStamina).toBeCloseTo(811.4286, 4)
+    expect(disabled.baseStamina).toBeCloseTo(661.4286, 4)
+    expect(disabled.preciseDays).toBeGreaterThan(enabled.preciseDays)
+  })
+
   it.each([
     [0, 440, 44, 0, 0],
     [3, 590, 59, 0, 0],

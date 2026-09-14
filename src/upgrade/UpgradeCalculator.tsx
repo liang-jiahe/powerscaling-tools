@@ -87,6 +87,15 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
     setForm((current) => ({ ...current, [key]: value }))
   }
 
+  const changeSuperKage = (superKage: boolean) => {
+    setForm((current) => {
+      const next = { ...current, superKage }
+      setSubmitted(next)
+      return next
+    })
+    setError('')
+  }
+
   const changeCurrentLevel = (currentLevel: number) => {
     const threshold = getUpgradeLevelData(currentLevel)?.expNeeded
     setForm((current) => ({
@@ -190,7 +199,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               <input
                 type="checkbox"
                 checked={form.superKage}
-                onChange={(event) => update('superKage', event.target.checked)}
+                onChange={(event) => changeSuperKage(event.target.checked)}
               />
               <i aria-hidden="true" />
             </label>
