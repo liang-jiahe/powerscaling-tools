@@ -63,6 +63,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
   }, [resetSignal])
 
   const result = useMemo(() => simulateUpgrade(submitted), [submitted])
+  const shuraOnlyResult = useMemo(() => simulateUpgrade(submitted, undefined, 'shuraOnly'), [submitted])
   const remainingExperience = useMemo(
     () => totalRemainingExperience(submitted.currentLevel, submitted.currentExp, submitted.targetLevel),
     [submitted],
@@ -194,16 +195,19 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
         </aside>
 
         <section className="upgrade-results" id="upgrade-results" aria-live="polite">
-          <div className="upgrade-summary-grid">
+          <div className="upgrade-comparison-grid">
             <article className="upgrade-summary primary">
-              <span>预计需要</span>
+              <span>精英 + 修罗</span>
               <strong>{formatDays(result.preciseDays)}<small>天</small></strong>
+              <p>完成 {formatUpgradeDate(result.completionDate)}</p>
             </article>
-            <article className="upgrade-summary mint">
-              <span>预计完成</span>
-              <strong className="date">{formatUpgradeDate(result.completionDate)}</strong>
-              <p>{submitted.currentLevel} 级 → {submitted.targetLevel} 级</p>
+            <article className="upgrade-summary shura">
+              <span>纯修罗</span>
+              <strong>{formatDays(shuraOnlyResult.preciseDays)}<small>天</small></strong>
+              <p>完成 {formatUpgradeDate(shuraOnlyResult.completionDate)}</p>
             </article>
+          </div>
+          <div className="upgrade-summary-grid">
             <article className="upgrade-summary yellow">
               <span>尚需经验</span>
               <strong>{formatInteger(remainingExperience)}</strong>
@@ -218,7 +222,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
           <div className="upgrade-detail-grid">
             <article className="upgrade-detail-card">
               <div className="upgrade-card-title">
-                <div><small>全程收益</small><h3>经验来源</h3></div>
+                <div><small>精英 + 修罗</small><h3>全程收益</h3></div>
                 <BarChart3 size={18} />
               </div>
               <dl className="upgrade-source-list">
@@ -235,7 +239,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
             <article className="upgrade-detail-card">
               <div className="upgrade-card-title">
-                <div><small>第一天预览</small><h3>当日收益</h3></div>
+                <div><small>精英 + 修罗</small><h3>当日收益</h3></div>
                 <span>{result.firstDay ? formatUpgradeDate(result.firstDay.date) : '—'}</span>
               </div>
               {result.firstDay ? (

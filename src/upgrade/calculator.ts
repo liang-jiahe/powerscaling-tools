@@ -279,7 +279,13 @@ type LegacyUpgradeConfig = Omit<UpgradeConfig, 'staminaBodies' | 'otherWeeklySta
   otherWeeklyStamina?: number
 }
 
-export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMULATION_DAYS): UpgradeResult {
+export type UpgradeDungeonStrategy = 'eliteThenShura' | 'shuraOnly'
+
+export function simulateUpgrade(
+  config: LegacyUpgradeConfig,
+  maxDays = MAX_SIMULATION_DAYS,
+  dungeonStrategy: UpgradeDungeonStrategy = 'eliteThenShura',
+): UpgradeResult {
   const normalized: UpgradeConfig = {
     ...config,
     staminaBodies: config.staminaBodies ?? 3,
@@ -312,9 +318,10 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
   const preciseDays = milestones.reduce((total, milestone) => {
     const row = getUpgradeLevelData(milestone.fromLevel)
     if (!row) throw new Error(`缺少 ${milestone.fromLevel} 级收益数据。`)
-    const eliteStamina = Math.min(averageDailyStamina, DAILY_ELITE_STAMINA_LIMIT)
-    const shuraStamina = Math.max(0, averageDailyStamina - DAILY_ELITE_STAMINA_LIMIT)
-    const dungeonExp = (eliteStamina / 10) * row.eliteExp + (shuraStamina / 10) * row.shuraExp
+    const dungeonExp = dungeonStrategy === 'shuraOnly'
+      ? (averageDailyStamina / 10) * row.shuraExp
+      : (Math.min(averageDailyStamina, DAILY_ELITE_STAMINA_LIMIT) / 10) * row.eliteExp +
+        (Math.max(0, averageDailyStamina - DAILY_ELITE_STAMINA_LIMIT) / 10) * row.shuraExp
     const bountyExp = calculateBountyExperience(row, normalized.vipLevel, normalized.superKage)
     return total + milestone.remaining / (dungeonExp + row.activeTotal + bountyExp)
   }, 0)
@@ -361,16 +368,18 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
     let activeExpToday = 0
     let bountyExpToday = 0
 
-    while (level < normalized.targetLevel && eliteRunsToday < DAILY_ELITE_STAMINA_LIMIT / 10 && stamina >= 10) {
-      const row = getUpgradeLevelData(level)
-      if (!row) throw new Error(`缺少 ${level} 级精英副本经验。`)
-      const reward = row.eliteExp
-      stamina -= 10
-      eliteRunsToday += 1
-      totals.eliteRuns += 1
-      totals.dungeonExp += reward
-      dungeonExpToday += reward
-      applyExperience(reward, date)
+    if (dungeonStrategy === 'eliteThenShura') {
+      while (level < normalized.targetLevel && eliteRunsToday < DAILY_ELITE_STAMINA_LIMIT / 10 && stamina >= 10) {
+        const row = getUpgradeLevelData(level)
+        if (!row) throw new Error(`缺少 ${level} 级精英副本经验。`)
+        const reward = row.eliteExp
+        stamina -= 10
+        eliteRunsToday += 1
+        totals.eliteRuns += 1
+        totals.dungeonExp += reward
+        dungeonExpToday += reward
+        applyExperience(reward, date)
+      }
     }
 
     while (level < normalized.targetLevel && stamina >= 10) {

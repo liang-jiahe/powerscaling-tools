@@ -140,7 +140,8 @@
 .upgrade-stamina-strip span { font-size: 13px; font-weight: 800; }
 .upgrade-stamina-strip strong { grid-column: 2; grid-row: 1 / 3; font-family: "Plus Jakarta Sans", sans-serif; font-size: 24px; }
 .upgrade-stamina-strip small { color: #63808a; font-size: 12px; }
-.upgrade-summary-grid { display: grid; grid-template-columns: 1.12fr 1fr; gap: 10px; }
+.upgrade-comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.upgrade-summary-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
 .upgrade-summary {
   min-height: 108px;
   padding: 15px;
@@ -149,8 +150,7 @@
   background: #fff;
 }
 .upgrade-summary.primary {
-  grid-row: span 2;
-  min-height: 226px;
+  min-height: 196px;
   padding: 22px;
   color: var(--primary-deep);
   background:
@@ -158,7 +158,7 @@
     var(--mint);
   border-color: #9fd5ba;
 }
-.upgrade-summary.mint { background: var(--mint-soft); }
+.upgrade-summary.shura { min-height: 196px; padding: 22px; color: #2f5b6c; background: #eaf5f8; border-color: #bfdae3; }
 .upgrade-summary.yellow { background: #fff9d8; border-color: #eee3ae; }
 .upgrade-summary > span { display: block; color: var(--muted); font-size: 13px; font-weight: 800; }
 .upgrade-summary strong {
@@ -169,7 +169,10 @@
   font-size: 24px;
   line-height: 1.15;
 }
-.upgrade-summary.primary strong { margin-top: 48px; color: var(--primary-deep); font-size: clamp(50px, 7vw, 76px); }
+.upgrade-summary.primary strong,
+.upgrade-summary.shura strong { margin-top: 38px; font-size: clamp(42px, 6vw, 64px); }
+.upgrade-summary.primary strong { color: var(--primary-deep); }
+.upgrade-summary.shura strong { color: #2f5b6c; }
 .upgrade-summary strong small { margin-left: 5px; font-size: 14px; }
 .upgrade-summary strong.date { font-family: "SimSun", "宋体", "Songti SC", "STSong", serif; font-size: 19px; font-weight: 800; }
 .upgrade-summary p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
@@ -275,10 +278,13 @@
   .upgrade-hero { padding: 48px 20px 25px; }
   .upgrade-hero h1 { font-size: 34px; }
   .upgrade-form-grid.two,
+  .upgrade-comparison-grid,
   .upgrade-summary-grid,
   .upgrade-detail-grid { grid-template-columns: 1fr; }
-  .upgrade-summary.primary { grid-row: auto; min-height: 170px; }
-  .upgrade-summary.primary strong { margin-top: 22px; font-size: 58px; }
+  .upgrade-summary.primary,
+  .upgrade-summary.shura { min-height: 170px; }
+  .upgrade-summary.primary strong,
+  .upgrade-summary.shura strong { margin-top: 22px; font-size: 58px; }
 }
 
 @media print {

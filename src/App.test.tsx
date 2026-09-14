@@ -88,6 +88,8 @@ describe('多板块导航与状态', () => {
     expect(screen.queryByText('开始推演')).not.toBeInTheDocument()
     expect(screen.queryByText('冲级路线')).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: '推演升级时间' })).not.toBeInTheDocument()
+    expect(screen.getAllByText('精英 + 修罗').length).toBeGreaterThan(0)
+    expect(screen.getByText('纯修罗')).toBeVisible()
     const progressTitle = screen.getByText('升级进度表')
     expect(progressTitle).toBeVisible()
     expect(progressTitle.closest('details')).not.toHaveAttribute('open')

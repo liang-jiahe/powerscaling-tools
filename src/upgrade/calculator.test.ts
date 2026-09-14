@@ -87,6 +87,14 @@ describe('逐日升级推演', () => {
     })
   })
 
+  it('纯修罗模式将全部体力用于修罗副本并单独计算结果', () => {
+    const mixed = simulateUpgrade({ ...baseConfig, staminaBodies: 9 })
+    const shuraOnly = simulateUpgrade({ ...baseConfig, staminaBodies: 9 }, undefined, 'shuraOnly')
+    expect(shuraOnly.firstDay).toMatchObject({ eliteRuns: 0, shuraRuns: 89, remainingStamina: 0 })
+    expect(shuraOnly.firstDay?.dungeonExp).toBe(89 * getUpgradeLevelData(140)!.shuraExp)
+    expect(shuraOnly.preciseDays).toBeLessThan(mixed.preciseDays)
+  })
+
   it('其他每周体力按七日平均计入每日基础体力', () => {
     const result = simulateUpgrade({ ...baseConfig, otherWeeklyStamina: 500 })
     expect(result.baseStamina).toBeCloseTo(590 + 500 / 7)
