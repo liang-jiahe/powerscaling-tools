@@ -73,21 +73,17 @@ describe('升级经验数据', () => {
 })
 
 describe('逐日升级推演', () => {
-  it('使用逐级三档 V 特权丰饶表并叠加超影基础加成', () => {
+  it('超影只增加拉面体力，不改变三档 V 特权丰饶经验', () => {
     const level140 = getUpgradeLevelData(140)!
-    const superBonus = (level140.bountyV10 / 1.2) * 0.3
     expect(simulateUpgrade({ ...baseConfig, vipLevel: 6 }).firstDay?.bountyExp).toBe(Math.round(level140.bountyV6))
     expect(simulateUpgrade({ ...baseConfig, vipLevel: 9 }).firstDay?.bountyExp).toBe(Math.round(level140.bountyV6))
     expect(simulateUpgrade(baseConfig).firstDay?.bountyExp).toBe(Math.round(level140.bountyV10))
     expect(simulateUpgrade({ ...baseConfig, vipLevel: 13 }).firstDay?.bountyExp).toBe(Math.round(level140.bountyV10))
     expect(simulateUpgrade({ ...baseConfig, vipLevel: 14 }).firstDay?.bountyExp).toBe(Math.round(level140.bountyV14))
     expect(simulateUpgrade({ ...baseConfig, vipLevel: 15 }).firstDay?.bountyExp).toBe(Math.round(level140.bountyV14))
-    expect(simulateUpgrade({ ...baseConfig, superKage: true }).firstDay?.bountyExp).toBe(
-      Math.round(level140.bountyV10 + superBonus),
-    )
-    expect(simulateUpgrade({ ...baseConfig, vipLevel: 14, superKage: true }).firstDay?.bountyExp).toBe(
-      Math.round(level140.bountyV14 + superBonus),
-    )
+    expect(simulateUpgrade({ ...baseConfig, superKage: true }).firstDay?.bountyExp).toBe(Math.round(level140.bountyV10))
+    expect(simulateUpgrade({ ...baseConfig, vipLevel: 14, superKage: true }).firstDay?.bountyExp).toBe(Math.round(level140.bountyV14))
+    expect(simulateUpgrade({ ...baseConfig, superKage: true }).baseStamina).toBe(baseConfig.staminaBodies * 50 + 590)
   })
 
   it.each([
@@ -114,6 +110,26 @@ describe('逐日升级推演', () => {
     })
     expect(result.preciseDays).toBeCloseTo(36.66334, 4)
     expect(result.days).toBe(37)
+  })
+
+  it('默认超影配置与参考页的 150 级 AB+修罗收益一致', () => {
+    const result = simulateUpgrade({
+      ...baseConfig,
+      currentLevel: 150,
+      targetLevel: 151,
+      vipLevel: 14,
+      superKage: true,
+      staminaBodies: 3,
+      otherWeeklyStamina: 500,
+    })
+    expect(result.baseStamina).toBeCloseTo(811.4286, 4)
+    expect(result.firstDay).toMatchObject({
+      bountyExp: 168_108,
+      activeExp: 105_607.2384,
+      eliteRuns: 75,
+      shuraRuns: 6,
+    })
+    expect(result.preciseDays).toBeCloseTo(40.48, 2)
   })
 
   it('其他每周体力按七日平均计入每日基础体力', () => {

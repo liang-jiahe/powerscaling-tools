@@ -193,10 +193,9 @@ function validateConfig(config: UpgradeConfig) {
   return parseUpgradeDate(config.startDate)
 }
 
-function calculateBountyExperience(row: UpgradeLevelRow, vipLevel: number, superKage: boolean) {
+function calculateBountyExperience(row: UpgradeLevelRow, vipLevel: number) {
   const vipBounty = vipLevel >= 14 ? row.bountyV14 : vipLevel >= 10 ? row.bountyV10 : row.bountyV6
-  const baseBounty = row.bountyV10 / 1.2
-  return Math.round(vipBounty + (superKage ? baseBounty * 0.3 : 0))
+  return Math.round(vipBounty)
 }
 
 type LegacyUpgradeConfig = Omit<UpgradeConfig, 'staminaBodies' | 'otherWeeklyStamina'> & {
@@ -240,7 +239,7 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
     const eliteStamina = Math.min(averageDailyStamina, DAILY_ELITE_STAMINA_LIMIT)
     const shuraStamina = Math.max(0, averageDailyStamina - DAILY_ELITE_STAMINA_LIMIT)
     const dungeonExp = (eliteStamina / 10) * row.eliteExp + (shuraStamina / 10) * row.shuraExp
-    const bountyExp = calculateBountyExperience(row, normalized.vipLevel, normalized.superKage)
+    const bountyExp = calculateBountyExperience(row, normalized.vipLevel)
     return total + milestone.remaining / (dungeonExp + row.activeTotal + bountyExp)
   }, 0)
 
@@ -321,7 +320,7 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
     if (level < normalized.targetLevel) {
       const row = getUpgradeLevelData(level)
       if (!row) throw new Error(`缺少 ${level} 级丰饶经验。`)
-      bountyExpToday = calculateBountyExperience(row, normalized.vipLevel, normalized.superKage)
+      bountyExpToday = calculateBountyExperience(row, normalized.vipLevel)
       totals.bountyExp += bountyExpToday
       applyExperience(bountyExpToday, date)
     }

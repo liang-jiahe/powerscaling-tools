@@ -53,8 +53,8 @@ const createDefaultConfig = (): UpgradeConfig => ({
   currentLevel: 140,
   currentExp: 0,
   targetLevel: 150,
-  vipLevel: 10,
-  superKage: false,
+  vipLevel: 14,
+  superKage: true,
   staminaBodies: 3,
   otherWeeklyStamina: 500,
   startDate: localDateInputValue(),
@@ -186,7 +186,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
             </div>
 
             <label className="upgrade-toggle">
-              <span><b>超影特权</b><small>丰饶 +30% · 每日再领 150 体力</small></span>
+              <span><b>超影特权</b><small>拉面体力由 150 提升至 300</small></span>
               <input
                 type="checkbox"
                 checked={form.superKage}
