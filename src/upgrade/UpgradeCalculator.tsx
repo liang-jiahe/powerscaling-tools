@@ -1,7 +1,7 @@
 import {
   BarChart3,
 } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import { NumberField } from '../components'
 import { ThemedSelect } from '../ThemedSelect'
 import {
@@ -49,6 +49,63 @@ const createDefaultConfig = (): UpgradeConfig => ({
   otherWeeklyStamina: 500,
   startDate: localDateInputValue(),
 })
+
+function UpgradeLevelPicker({
+  label,
+  value,
+  levels,
+  onChange,
+}: {
+  label: string
+  value: number
+  levels: number[]
+  onChange: (level: number) => void
+}) {
+  const [draft, setDraft] = useState(String(value))
+  const listId = useId()
+  const min = levels[0] ?? 110
+  const max = levels.at(-1) ?? 175
+
+  useEffect(() => {
+    setDraft(String(value))
+  }, [value])
+
+  const commit = (raw: string) => {
+    const level = Number(raw)
+    if (Number.isInteger(level) && levels.includes(level)) {
+      onChange(level)
+      return
+    }
+    setDraft(String(value))
+  }
+
+  return (
+    <label className="field upgrade-level-picker">
+      <span>{label}</span>
+      <div className="input-shell">
+        <input
+          type="number"
+          min={min}
+          max={max}
+          step="1"
+          list={listId}
+          value={draft}
+          onChange={(event) => {
+            const raw = event.target.value
+            setDraft(raw)
+            const level = Number(raw)
+            if (Number.isInteger(level) && levels.includes(level)) onChange(level)
+          }}
+          onBlur={() => commit(draft)}
+        />
+        <b aria-hidden="true">级</b>
+      </div>
+      <datalist id={listId}>
+        {levels.map((level) => <option key={level} value={level}>{level} 级</option>)}
+      </datalist>
+    </label>
+  )
+}
 
 export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
   const [form, setForm] = useState<UpgradeConfig>(createDefaultConfig)
@@ -116,19 +173,16 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
         <aside className="upgrade-form-card">
           <div className="upgrade-form">
             <div className="upgrade-form-grid two">
-              <ThemedSelect
+              <UpgradeLevelPicker
                 label="当前等级"
                 value={form.currentLevel}
-                options={LEVELS.map((level) => ({ value: level, label: `${level} 级` }))}
+                levels={LEVELS}
                 onChange={changeCurrentLevel}
               />
-              <ThemedSelect
+              <UpgradeLevelPicker
                 label="目标等级"
                 value={form.targetLevel}
-                options={LEVELS.filter((level) => level >= form.currentLevel).map((level) => ({
-                  value: level,
-                  label: `${level} 级`,
-                }))}
+                levels={LEVELS.filter((level) => level >= form.currentLevel)}
                 onChange={(targetLevel) => update('targetLevel', targetLevel)}
               />
             </div>
