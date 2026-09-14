@@ -2,7 +2,6 @@ import {
   BarChart3,
   BookOpenText,
   CalendarDays,
-  Cat,
   ChevronRight,
   Clock3,
   Gift,
@@ -123,16 +122,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
       <section className="upgrade-hero">
         <div className="upgrade-hero-copy">
           <h1>升级时间计算</h1>
-          <p>把每日体力、精英与修罗副本、活跃和丰饶收益逐日推演，算出预计升级日期。</p>
-          <div className="upgrade-hero-pills">
-            <span>110—175 级</span><span>逐日推演</span><span>本地计算</span>
-          </div>
         </div>
-        <div className="upgrade-hero-mark" aria-hidden="true">
-          <Cat size={36} />
-          <span>还要几天？</span>
-        </div>
-        <div className="upgrade-credit"><Cat size={14} />繁星の猫猫星 制作</div>
       </section>
 
       <div className="upgrade-layout">
@@ -315,11 +305,11 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
             </article>
           </div>
 
-          <article className="upgrade-table-card">
-            <div className="upgrade-card-title">
+          <details className="upgrade-table-card">
+            <summary className="upgrade-card-title">
               <div><small>逐级里程碑</small><h3>升级进度表</h3></div>
-              <span>{result.milestones.length} 个阶段</span>
-            </div>
+              <span>{result.milestones.length} 个阶段 · 点击展开</span>
+            </summary>
             <div className="upgrade-table-scroll">
               <table>
                 <thead><tr><th>升级阶段</th><th>该级所需</th><th>已有抵扣</th><th>本阶段尚需</th><th>预计到达</th></tr></thead>
@@ -339,7 +329,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
                 </tbody>
               </table>
             </div>
-          </article>
+          </details>
         </section>
       </div>
 

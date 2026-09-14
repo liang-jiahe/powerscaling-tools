@@ -6,12 +6,12 @@
 }
 
 .upgrade-hero {
-  min-height: 245px;
-  padding: 36px 42px;
+  min-height: 142px;
+  padding: 30px 42px;
   position: relative;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   align-items: center;
   gap: 28px;
   border: 1px solid var(--line);
@@ -52,51 +52,6 @@
   line-height: 1.12;
   letter-spacing: -.05em;
 }
-.upgrade-hero p { max-width: 620px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.8; }
-.upgrade-hero-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
-.upgrade-hero-pills span {
-  padding: 6px 10px;
-  border: 1px solid #e0e7e2;
-  border-radius: 999px;
-  background: rgba(255,255,255,.82);
-  color: #66736b;
-  font-size: 12px;
-  font-weight: 700;
-}
-.upgrade-hero-mark {
-  width: 172px;
-  height: 132px;
-  position: relative;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 6px;
-  border: 1px solid #c9e4d7;
-  border-radius: 50% 46% 48% 44%;
-  color: var(--primary-deep);
-  background: linear-gradient(145deg, var(--mint), #e8f8f0);
-  box-shadow: 0 14px 32px rgba(56,103,84,.12);
-  transform: rotate(2deg);
-}
-.upgrade-hero-mark span { font-size: 14px; font-weight: 800; }
-.upgrade-credit {
-  position: absolute;
-  top: 20px;
-  right: 22px;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 9px;
-  border: 1px solid #d7e7dc;
-  border-radius: 999px;
-  color: var(--primary-deep);
-  background: rgba(255,255,255,.75);
-  font-size: 12px;
-  font-weight: 800;
-}
-
 .upgrade-layout {
   display: grid;
   grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
@@ -333,7 +288,11 @@
 .upgrade-run-stats b { color: var(--primary-deep); }
 .upgrade-empty { color: var(--muted); font-size: 13px; }
 .upgrade-table-card { margin-top: 10px; padding: 0; overflow: hidden; }
+.upgrade-table-card summary { list-style: none; cursor: pointer; }
+.upgrade-table-card summary::-webkit-details-marker { display: none; }
 .upgrade-table-card .upgrade-card-title { padding: 16px; }
+.upgrade-table-card .upgrade-card-title > span::after { content: "＋"; margin-left: 8px; color: var(--primary); font-size: 17px; }
+.upgrade-table-card[open] .upgrade-card-title > span::after { content: "－"; }
 .upgrade-table-scroll { width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
 .upgrade-table-scroll table { width: 100%; border-collapse: collapse; white-space: nowrap; font-size: 13px; }
 .upgrade-table-scroll th,
@@ -385,11 +344,8 @@
 
 @media (max-width: 780px) {
   .upgrade-workspace { width: min(100% - 24px, 720px); padding: 15px 0 25px; }
-  .upgrade-hero { min-height: auto; padding: 32px 24px; grid-template-columns: 1fr; text-align: center; border-radius: 28px; }
+  .upgrade-hero { min-height: 128px; padding: 32px 24px; grid-template-columns: 1fr; text-align: center; border-radius: 28px; }
   .upgrade-hero-copy { margin: 0 auto; }
-  .upgrade-hero-pills { justify-content: center; }
-  .upgrade-hero-mark { width: 150px; height: 112px; margin: 10px auto 0; }
-  .upgrade-credit { top: 13px; right: 14px; }
   .upgrade-layout { gap: 12px; margin-top: 12px; }
   .upgrade-form-card, .upgrade-results { padding: 18px; border-radius: 24px; }
 }
@@ -407,7 +363,7 @@
 }
 
 @media print {
-  .upgrade-form-card, .upgrade-hero-mark, .upgrade-credit { display: none !important; }
+  .upgrade-form-card { display: none !important; }
   .upgrade-workspace { width: 100%; padding: 0; }
   .upgrade-layout { display: block; }
   .upgrade-hero, .upgrade-results, .upgrade-reference { border-color: #bbb; box-shadow: none; }
