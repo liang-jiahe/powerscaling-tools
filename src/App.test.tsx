@@ -85,7 +85,9 @@ describe('多板块导航与状态', () => {
     fireEvent.click(screen.getByRole('link', { name: '进入升级时间计算' }))
 
     expect(screen.getByRole('heading', { name: '升级时间计算' })).toBeVisible()
-    expect(screen.getByText('冲级路线')).toBeVisible()
+    expect(screen.queryByText('开始推演')).not.toBeInTheDocument()
+    expect(screen.queryByText('冲级路线')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '推演升级时间' })).not.toBeInTheDocument()
     const progressTitle = screen.getByText('升级进度表')
     expect(progressTitle).toBeVisible()
     expect(progressTitle.closest('details')).not.toHaveAttribute('open')

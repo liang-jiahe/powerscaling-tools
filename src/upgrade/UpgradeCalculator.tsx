@@ -1,12 +1,8 @@
 import {
   BarChart3,
-  BookOpenText,
-  ChevronRight,
-  Clock3,
-  Gift,
   Sparkles,
 } from 'lucide-react'
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { NumberField } from '../components'
 import { ThemedSelect } from '../ThemedSelect'
 import {
@@ -61,14 +57,12 @@ const createDefaultConfig = (): UpgradeConfig => ({
 export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
   const [form, setForm] = useState<UpgradeConfig>(createDefaultConfig)
   const [submitted, setSubmitted] = useState<UpgradeConfig>(createDefaultConfig)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     if (resetSignal === 0) return
     const next = createDefaultConfig()
     setForm(next)
     setSubmitted(next)
-    setError('')
   }, [resetSignal])
 
   const result = useMemo(() => simulateUpgrade(submitted), [submitted])
@@ -82,7 +76,11 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
   const baseStamina = BASE_DAILY_STAMINA + (form.superKage ? 150 : 0) + purchasedStamina + otherDailyStamina
 
   const update = <K extends keyof UpgradeConfig>(key: K, value: UpgradeConfig[K]) => {
-    setForm((current) => ({ ...current, [key]: value }))
+    setForm((current) => {
+      const next = { ...current, [key]: value, startDate: localDateInputValue() }
+      setSubmitted(next)
+      return next
+    })
   }
 
   const changeSuperKage = (superKage: boolean) => {
@@ -91,30 +89,21 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
       setSubmitted(next)
       return next
     })
-    setError('')
   }
 
   const changeCurrentLevel = (currentLevel: number) => {
     const threshold = getUpgradeLevelData(currentLevel)?.expNeeded
-    setForm((current) => ({
-      ...current,
-      currentLevel,
-      currentExp: Math.min(current.currentExp, Math.max(0, (threshold ?? 1) - 1)),
-      targetLevel: Math.max(current.targetLevel, currentLevel),
-    }))
-  }
-
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const next = { ...form, startDate: localDateInputValue() }
-    try {
-      simulateUpgrade(next)
+    setForm((current) => {
+      const next = {
+        ...current,
+        currentLevel,
+        currentExp: Math.min(current.currentExp, Math.max(0, (threshold ?? 1) - 1)),
+        targetLevel: Math.max(current.targetLevel, currentLevel),
+        startDate: localDateInputValue(),
+      }
       setSubmitted(next)
-      setError('')
-      window.requestAnimationFrame(() => document.getElementById('upgrade-results')?.scrollIntoView({ block: 'start' }))
-    } catch (reason) {
-      setError(reason instanceof Error ? reason.message : '升级时间计算失败。')
-    }
+      return next
+    })
   }
 
   return (
@@ -127,12 +116,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
       <div className="upgrade-layout">
         <aside className="upgrade-form-card">
-          <div className="upgrade-section-title">
-            <span>01</span>
-            <div><small>角色状态</small><h2>开始推演</h2></div>
-          </div>
-
-          <form onSubmit={submit}>
+          <div className="upgrade-form">
             <div className="upgrade-form-grid two">
               <ThemedSelect
                 label="当前等级"
@@ -209,20 +193,11 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               </small>
             </div>
 
-            {error && <p className="upgrade-error" role="alert">{error}</p>}
-
-            <button className="upgrade-submit" type="submit">
-              <Clock3 size={18} /><span>推演升级时间</span><ChevronRight size={18} />
-            </button>
-          </form>
+          </div>
         </aside>
 
         <section className="upgrade-results" id="upgrade-results" aria-live="polite">
           <div className="upgrade-results-head">
-            <div className="upgrade-section-title">
-              <span>02</span>
-              <div><small>逐日计算结果</small><h2>冲级路线</h2></div>
-            </div>
             <div className="upgrade-config-chip">
               {vipTierLabel(submitted.vipLevel)} · {submitted.superKage ? '超影' : '非超影'} ·
               {submitted.staminaBodies === 0 ? ' 不买体' : ` ${submitted.staminaBodies} 体`}
@@ -233,7 +208,6 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
             <article className="upgrade-summary primary">
               <span>预计需要</span>
               <strong>{formatDays(result.preciseDays)}<small>天</small></strong>
-              <p>按平均每日收益精确计算</p>
             </article>
             <article className="upgrade-summary mint">
               <span>预计完成</span>
@@ -243,7 +217,6 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
             <article className="upgrade-summary yellow">
               <span>尚需经验</span>
               <strong>{formatInteger(remainingExperience)}</strong>
-              <p>已抵扣本级现有经验</p>
             </article>
           </div>
 
@@ -342,11 +315,6 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
         </div>
       </details>
 
-      <div className="upgrade-footnote">
-        <BookOpenText size={16} />
-        <p>110—170 级经验与收益依据截图表整理；丰饶关闭超影时使用基础经验，开启后按 V 档位倍率计算；副本经验不受超影影响。171—175 级仍为推算数据。</p>
-        <Gift size={16} />
-      </div>
     </div>
   )
 }
