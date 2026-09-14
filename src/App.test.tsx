@@ -89,6 +89,7 @@ describe('多板块导航与状态', () => {
     const progressTitle = screen.getByText('升级进度表')
     expect(progressTitle).toBeVisible()
     expect(progressTitle.closest('details')).not.toHaveAttribute('open')
+    expect(screen.queryByText('开始日期')).not.toBeInTheDocument()
     expect(screen.getByText('查看 110—175 级经验表')).toBeVisible()
   })
 

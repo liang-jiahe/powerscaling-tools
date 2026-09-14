@@ -102,10 +102,6 @@
 .upgrade-form-card .input-shell b { font-size: 12px; }
 .upgrade-field-help { margin: -5px 0 13px; color: var(--muted); font-size: 13px; line-height: 1.6; }
 .upgrade-divider { height: 1px; margin: 4px 0 16px; background: linear-gradient(90deg, transparent, var(--line), transparent); }
-.upgrade-date-field .input-shell { padding-left: 12px; }
-.upgrade-date-field .input-shell svg { flex: none; color: var(--primary); }
-.upgrade-date-field input { padding-left: 8px; }
-
 .upgrade-toggle {
   min-height: 62px;
   margin: 4px 0 13px;

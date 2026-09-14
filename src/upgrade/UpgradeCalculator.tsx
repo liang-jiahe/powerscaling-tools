@@ -1,7 +1,6 @@
 import {
   BarChart3,
   BookOpenText,
-  CalendarDays,
   ChevronRight,
   Clock3,
   Gift,
@@ -88,7 +87,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
   const changeSuperKage = (superKage: boolean) => {
     setForm((current) => {
-      const next = { ...current, superKage }
+      const next = { ...current, superKage, startDate: localDateInputValue() }
       setSubmitted(next)
       return next
     })
@@ -107,9 +106,10 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const next = { ...form, startDate: localDateInputValue() }
     try {
-      simulateUpgrade(form)
-      setSubmitted({ ...form })
+      simulateUpgrade(next)
+      setSubmitted(next)
       setError('')
       window.requestAnimationFrame(() => document.getElementById('upgrade-results')?.scrollIntoView({ block: 'start' }))
     } catch (reason) {
@@ -164,25 +164,12 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
             <div className="upgrade-divider" />
 
-            <div className="upgrade-form-grid two">
-              <ThemedSelect
-                label="V 特权等级"
-                value={form.vipLevel}
-                options={VIP_LEVELS}
-                onChange={(vipLevel) => update('vipLevel', vipLevel)}
-              />
-              <label className="field upgrade-date-field">
-                <span>开始日期</span>
-                <div className="input-shell">
-                  <CalendarDays size={16} aria-hidden="true" />
-                  <input
-                    type="date"
-                    value={form.startDate}
-                    onChange={(event) => update('startDate', event.target.value)}
-                  />
-                </div>
-              </label>
-            </div>
+            <ThemedSelect
+              label="V 特权等级"
+              value={form.vipLevel}
+              options={VIP_LEVELS}
+              onChange={(vipLevel) => update('vipLevel', vipLevel)}
+            />
 
             <label className="upgrade-toggle">
               <span><b>超影特权</b></span>
