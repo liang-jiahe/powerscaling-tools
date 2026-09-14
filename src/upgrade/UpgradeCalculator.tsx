@@ -26,7 +26,11 @@ import {
 import './upgrade.css'
 
 const LEVELS = UPGRADE_LEVEL_DATA.map((item) => item.level)
-const VIP_LEVELS = [10, 11, 12, 13, 14, 15]
+const VIP_LEVELS = [
+  { value: 6, label: 'V10 以下' },
+  { value: 10, label: 'V10—V13' },
+  { value: 14, label: 'V14—V15' },
+]
 const STAMINA_OPTIONS: Array<{ value: StaminaBodies; label: string; hint: string }> = [
   { value: 0, label: '不买体力', hint: `每日基础 ${BASE_DAILY_STAMINA} 体力` },
   { value: 3, label: '三体', hint: '额外 150 体力' },
@@ -41,6 +45,9 @@ const formatDays = (value: number) =>
   new Intl.NumberFormat('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
     Number.isFinite(value) ? value : 0,
   )
+
+const vipTierLabel = (level: number) =>
+  level >= 14 ? 'V14—V15' : level >= 10 ? 'V10—V13' : 'V10 以下'
 
 const createDefaultConfig = (): UpgradeConfig => ({
   currentLevel: 140,
@@ -109,7 +116,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
           <h1>升级时间计算</h1>
           <p>把每日体力、精英与修罗副本、活跃和丰饶收益逐日推演，算出预计升级日期。</p>
           <div className="upgrade-hero-pills">
-            <span>140—170 级</span><span>逐日推演</span><span>本地计算</span>
+            <span>140—175 级</span><span>逐日推演</span><span>本地计算</span>
           </div>
         </div>
         <div className="upgrade-hero-mark" aria-hidden="true">
@@ -162,7 +169,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               <ThemedSelect
                 label="V 特权等级"
                 value={form.vipLevel}
-                options={VIP_LEVELS.map((level) => ({ value: level, label: `V${level}` }))}
+                options={VIP_LEVELS}
                 onChange={(vipLevel) => update('vipLevel', vipLevel)}
               />
               <label className="field upgrade-date-field">
@@ -231,7 +238,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
               <div><small>逐日计算结果</small><h2>冲级路线</h2></div>
             </div>
             <div className="upgrade-config-chip">
-              V{submitted.vipLevel} · {submitted.superKage ? '超影' : '非超影'} ·
+              {vipTierLabel(submitted.vipLevel)} · {submitted.superKage ? '超影' : '非超影'} ·
               {submitted.staminaBodies === 0 ? ' 不买体' : ` ${submitted.staminaBodies} 体`}
             </div>
           </div>
@@ -261,7 +268,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
           <div className="upgrade-rule">
             <Sparkles size={18} />
-            <p>每日按 <b>精英 A+B → 修罗 → 活跃合计 → 丰饶</b> 的顺序计算，升级后立即切换新等级经验。</p>
+            <p>每日按 <b>精英 → 修罗 → 活跃合计 → 丰饶</b> 的顺序计算，升级后立即切换新等级经验。</p>
           </div>
 
           <div className="upgrade-detail-grid">
@@ -329,22 +336,23 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
       <details className="upgrade-reference" id="upgrade-reference">
         <summary>
-          <span>查看 140—170 级原始经验表</span>
+          <span>查看 140—175 级经验表</span>
           <b aria-hidden="true">＋</b>
         </summary>
         <div className="upgrade-table-scroll">
           <table>
-            <thead><tr><th>等级</th><th>升级所需经验</th><th>V10 丰饶</th><th>V14 丰饶</th><th>活跃合计</th><th>普通副本</th><th>精英副本</th><th>修罗副本</th></tr></thead>
+            <thead><tr><th>等级</th><th>数据</th><th>升级所需经验</th><th>V10 以下丰饶</th><th>V10—V13 丰饶</th><th>V14—V15 丰饶</th><th>活跃合计</th><th>精英副本</th><th>修罗副本</th></tr></thead>
             <tbody>
               {UPGRADE_LEVEL_DATA.map((row) => (
                 <tr key={row.level}>
                   <td><b>{row.level}</b></td>
+                  <td>{row.isEstimated ? '推算' : '参考页'}</td>
                   <td>{row.expNeeded ? formatInteger(row.expNeeded) : '满级'}</td>
+                  <td>{formatInteger(row.bountyV6)}</td>
                   <td>{formatInteger(row.bountyV10)}</td>
                   <td>{formatInteger(row.bountyV14)}</td>
                   <td>{formatInteger(row.activeTotal)}</td>
-                  <td>{formatInteger(row.normalExp)}</td>
-                  <td>{formatInteger(row.normalExp * 2)}</td>
+                  <td>{formatInteger(row.eliteExp)}</td>
                   <td>{formatInteger(row.shuraExp)}</td>
                 </tr>
               ))}
@@ -355,7 +363,7 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
 
       <div className="upgrade-footnote">
         <BookOpenText size={16} />
-        <p>数据依据 140—170 级经验表，结果仅供冲级规划参考；所有计算均在浏览器本地完成。</p>
+        <p>140—170 级数据来自参考页；171—175 级按已知增量推算，待游戏实测数据发布后可校准。结果仅供冲级规划参考，所有计算均在浏览器本地完成。</p>
         <Gift size={16} />
       </div>
     </div>

@@ -1,11 +1,13 @@
 export interface UpgradeLevelRow {
   level: number
   expNeeded: number | null
+  bountyV6: number
   bountyV10: number
   bountyV14: number
   activeTotal: number
-  normalExp: number
+  eliteExp: number
   shuraExp: number
+  isEstimated?: boolean
 }
 
 export type StaminaBodies = 0 | 3 | 6 | 9
@@ -68,37 +70,42 @@ export interface UpgradeResult {
 }
 
 export const UPGRADE_LEVEL_DATA: readonly UpgradeLevelRow[] = [
-  { level: 140, expNeeded: 10035498, bountyV10: 112033.9, bountyV14: 119502.8792, activeTotal: 75087.8896, normalExp: 788, shuraExp: 4201.616 },
-  { level: 141, expNeeded: 11035498, bountyV10: 114166.525, bountyV14: 121777.6802, activeTotal: 76517.2276, normalExp: 803, shuraExp: 4281.596 },
-  { level: 142, expNeeded: 12035498, bountyV10: 116299.15, bountyV14: 124052.4812, activeTotal: 77946.5656, normalExp: 818, shuraExp: 4361.576 },
-  { level: 143, expNeeded: 13015782, bountyV10: 118431.775, bountyV14: 126327.2822, activeTotal: 79375.9036, normalExp: 833, shuraExp: 4441.556 },
-  { level: 144, expNeeded: 15045458, bountyV10: 120848.75, bountyV14: 128905.39, activeTotal: 80995.82, normalExp: 850, shuraExp: 4532.2 },
-  { level: 145, expNeeded: 16045458, bountyV10: 124403.125, bountyV14: 132696.725, activeTotal: 83378.05, normalExp: 875, shuraExp: 4665.5 },
-  { level: 146, expNeeded: 16545458, bountyV10: 127957.5, bountyV14: 136488.06, activeTotal: 85760.28, normalExp: 900, shuraExp: 4798.8 },
-  { level: 147, expNeeded: 17045458, bountyV10: 131511.875, bountyV14: 140279.395, activeTotal: 88142.51, normalExp: 925, shuraExp: 4932.1 },
-  { level: 148, expNeeded: 17545458, bountyV10: 135066.25, bountyV14: 144070.73, activeTotal: 90524.74, normalExp: 950, shuraExp: 5065.4 },
-  { level: 149, expNeeded: 18045458, bountyV10: 138620.625, bountyV14: 147862.065, activeTotal: 92906.97, normalExp: 975, shuraExp: 5198.7 },
-  { level: 150, expNeeded: 18545458, bountyV10: 142175, bountyV14: 151653.4, activeTotal: 95289.2, normalExp: 1000, shuraExp: 5332 },
-  { level: 151, expNeeded: 19055458, bountyV10: 145729.375, bountyV14: 155444.735, activeTotal: 97671.43, normalExp: 1025, shuraExp: 5465.3 },
-  { level: 152, expNeeded: 19565458, bountyV10: 149283.75, bountyV14: 159236.07, activeTotal: 100053.66, normalExp: 1050, shuraExp: 5598.6 },
-  { level: 153, expNeeded: 20075458, bountyV10: 152838.125, bountyV14: 163027.405, activeTotal: 102435.89, normalExp: 1075, shuraExp: 5731.9 },
-  { level: 154, expNeeded: 20585458, bountyV10: 156392.5, bountyV14: 166818.74, activeTotal: 104818.12, normalExp: 1100, shuraExp: 5865.2 },
-  { level: 155, expNeeded: 21095457, bountyV10: 159946.875, bountyV14: 170610.075, activeTotal: 107200.35, normalExp: 1125, shuraExp: 5998.5 },
-  { level: 156, expNeeded: 21645458, bountyV10: 167411.0625, bountyV14: 178571.8785, activeTotal: 112203.033, normalExp: 1177.5, shuraExp: 6278.43 },
-  { level: 157, expNeeded: 22195458, bountyV10: 167553.2375, bountyV14: 178723.5319, activeTotal: 112298.3222, normalExp: 1178.5, shuraExp: 6283.762 },
-  { level: 158, expNeeded: 22745458, bountyV10: 167695.4125, bountyV14: 178875.1853, activeTotal: 112393.6114, normalExp: 1179.5, shuraExp: 6289.094 },
-  { level: 159, expNeeded: 23295458, bountyV10: 167837.5875, bountyV14: 179026.8387, activeTotal: 112488.9006, normalExp: 1180.5, shuraExp: 6294.426 },
-  { level: 160, expNeeded: 24665458, bountyV10: 167979.7625, bountyV14: 179178.4921, activeTotal: 112584.1898, normalExp: 1181.5, shuraExp: 6299.758 },
-  { level: 161, expNeeded: 25485458, bountyV10: 168050.85, bountyV14: 179254.3188, activeTotal: 112631.8344, normalExp: 1182, shuraExp: 6302.424 },
-  { level: 162, expNeeded: 26305458, bountyV10: 168121.9375, bountyV14: 179330.1455, activeTotal: 112679.479, normalExp: 1182.5, shuraExp: 6305.09 },
-  { level: 163, expNeeded: 27125458, bountyV10: 168193.025, bountyV14: 179405.9722, activeTotal: 112727.1236, normalExp: 1183, shuraExp: 6307.756 },
-  { level: 164, expNeeded: 27945458, bountyV10: 168264.1125, bountyV14: 179481.7989, activeTotal: 112774.7682, normalExp: 1183.5, shuraExp: 6310.422 },
-  { level: 165, expNeeded: 29135458, bountyV10: 168335.2, bountyV14: 179557.6256, activeTotal: 112822.4128, normalExp: 1184, shuraExp: 6313.088 },
-  { level: 166, expNeeded: 30325458, bountyV10: 168406.2875, bountyV14: 179633.4523, activeTotal: 112870.0574, normalExp: 1184.5, shuraExp: 6315.754 },
-  { level: 167, expNeeded: 31515458, bountyV10: 168477.375, bountyV14: 179709.279, activeTotal: 112917.702, normalExp: 1185, shuraExp: 6318.42 },
-  { level: 168, expNeeded: 32705458, bountyV10: 168548.4625, bountyV14: 179785.1057, activeTotal: 112965.3466, normalExp: 1185.5, shuraExp: 6321.086 },
-  { level: 169, expNeeded: 33895458, bountyV10: 168619.55, bountyV14: 179860.9324, activeTotal: 113012.9912, normalExp: 1186, shuraExp: 6323.752 },
-  { level: 170, expNeeded: null, bountyV10: 0, bountyV14: 0, activeTotal: 113039, normalExp: 1186, shuraExp: 6326 },
+  { level: 140, expNeeded: 10035498, bountyV6: 104564.9208, bountyV10: 112033.9, bountyV14: 119502.8792, activeTotal: 75073.0752, eliteExp: 1607, shuraExp: 2142.131 },
+  { level: 141, expNeeded: 11035498, bountyV6: 106555.3698, bountyV10: 114166.525, bountyV14: 121777.6802, activeTotal: 76502.1312, eliteExp: 1668, shuraExp: 2223.444 },
+  { level: 142, expNeeded: 12035498, bountyV6: 108545.8188, bountyV10: 116299.15, bountyV14: 124052.4812, activeTotal: 77931.1872, eliteExp: 1729, shuraExp: 2304.757 },
+  { level: 143, expNeeded: 13015782, bountyV6: 110536.2678, bountyV10: 118431.775, bountyV14: 126327.2822, activeTotal: 79360.2432, eliteExp: 1790, shuraExp: 2386.07 },
+  { level: 144, expNeeded: 15045458, bountyV6: 112792.11, bountyV10: 120848.75, bountyV14: 128905.39, activeTotal: 80979.84, eliteExp: 1851, shuraExp: 2467.383 },
+  { level: 145, expNeeded: 16045458, bountyV6: 116109.525, bountyV10: 124403.125, bountyV14: 132696.725, activeTotal: 83361.6, eliteExp: 1912, shuraExp: 2548.696 },
+  { level: 146, expNeeded: 16545458, bountyV6: 119426.94, bountyV10: 127957.5, bountyV14: 136488.06, activeTotal: 85743.36, eliteExp: 1973, shuraExp: 2630.009 },
+  { level: 147, expNeeded: 17045458, bountyV6: 134952.4422, bountyV10: 144591.975, bountyV14: 154231.5078, activeTotal: 96889.9968, eliteExp: 2034, shuraExp: 2711.322 },
+  { level: 148, expNeeded: 17545458, bountyV6: 126061.77, bountyV10: 135066.25, bountyV14: 144070.73, activeTotal: 90506.88, eliteExp: 2095, shuraExp: 2792.635 },
+  { level: 149, expNeeded: 18045458, bountyV6: 129379.185, bountyV10: 138620.625, bountyV14: 147862.065, activeTotal: 92888.64, eliteExp: 2156, shuraExp: 2873.948 },
+  { level: 150, expNeeded: 18545458, bountyV6: 147094.1811, bountyV10: 157600.9875, bountyV14: 168107.7939, activeTotal: 105607.2384, eliteExp: 2217, shuraExp: 2955.261 },
+  { level: 151, expNeeded: 19055458, bountyV6: 136014.015, bountyV10: 145729.375, bountyV14: 155444.735, activeTotal: 97652.16, eliteExp: 2278, shuraExp: 3036.574 },
+  { level: 152, expNeeded: 19565458, bountyV6: 139331.43, bountyV10: 149283.75, bountyV14: 159236.07, activeTotal: 100033.92, eliteExp: 2338, shuraExp: 3116.554 },
+  { level: 153, expNeeded: 20075458, bountyV6: 142648.845, bountyV10: 152838.125, bountyV14: 163027.405, activeTotal: 102415.68, eliteExp: 2392, shuraExp: 3188.536 },
+  { level: 154, expNeeded: 20585458, bountyV6: 145966.26, bountyV10: 156392.5, bountyV14: 166818.74, activeTotal: 104797.44, eliteExp: 2446, shuraExp: 3260.518 },
+  { level: 155, expNeeded: 21095458, bountyV6: 149283.675, bountyV10: 159946.875, bountyV14: 170610.075, activeTotal: 107179.2, eliteExp: 2500, shuraExp: 3332.5 },
+  { level: 156, expNeeded: 21645458, bountyV6: 156250.2465, bountyV10: 167411.0625, bountyV14: 178571.8785, activeTotal: 112180.896, eliteExp: 2552, shuraExp: 3401.816 },
+  { level: 157, expNeeded: 22195458, bountyV6: 156382.9431, bountyV10: 167553.2375, bountyV14: 178723.5319, activeTotal: 112276.1664, eliteExp: 2589, shuraExp: 3451.137 },
+  { level: 158, expNeeded: 22745458, bountyV6: 156515.6397, bountyV10: 167695.4125, bountyV14: 178875.1853, activeTotal: 112371.4368, eliteExp: 2626, shuraExp: 3500.458 },
+  { level: 159, expNeeded: 23295458, bountyV6: 156648.3363, bountyV10: 167837.5875, bountyV14: 179026.8387, activeTotal: 112466.7072, eliteExp: 2663, shuraExp: 3549.779 },
+  { level: 160, expNeeded: 24665458, bountyV6: 156781.0329, bountyV10: 167979.7625, bountyV14: 179178.4921, activeTotal: 112561.9776, eliteExp: 2700, shuraExp: 3599.1 },
+  { level: 161, expNeeded: 25485458, bountyV6: 156847.3812, bountyV10: 168050.85, bountyV14: 179254.3188, activeTotal: 112609.6128, eliteExp: 2720, shuraExp: 3625.76 },
+  { level: 162, expNeeded: 26305458, bountyV6: 156913.7295, bountyV10: 168121.9375, bountyV14: 179330.1455, activeTotal: 112657.248, eliteExp: 2740, shuraExp: 3652.42 },
+  { level: 163, expNeeded: 27125458, bountyV6: 156980.0778, bountyV10: 168193.025, bountyV14: 179405.9722, activeTotal: 112704.8832, eliteExp: 2760, shuraExp: 3679.08 },
+  { level: 164, expNeeded: 27945458, bountyV6: 157046.4261, bountyV10: 168264.1125, bountyV14: 179481.7989, activeTotal: 112752.5184, eliteExp: 2780, shuraExp: 3705.74 },
+  { level: 165, expNeeded: 29135458, bountyV6: 157112.7744, bountyV10: 168335.2, bountyV14: 179557.6256, activeTotal: 112800.1536, eliteExp: 2800, shuraExp: 3732.4 },
+  { level: 166, expNeeded: 30325458, bountyV6: 157179.1227, bountyV10: 168406.2875, bountyV14: 179633.4523, activeTotal: 112847.7888, eliteExp: 2818, shuraExp: 3756.394 },
+  { level: 167, expNeeded: 31515458, bountyV6: 187301.2509, bountyV10: 200680.0125, bountyV14: 214058.7741, activeTotal: 134474.1696, eliteExp: 2823, shuraExp: 3763.059 },
+  { level: 168, expNeeded: 32705458, bountyV6: 157311.8193, bountyV10: 168548.4625, bountyV14: 179785.1057, activeTotal: 112943.0592, eliteExp: 2828, shuraExp: 3769.724 },
+  { level: 169, expNeeded: 33895458, bountyV6: 157378.1676, bountyV10: 168619.55, bountyV14: 179860.9324, activeTotal: 112990.6944, eliteExp: 2833, shuraExp: 3776.389 },
+  { level: 170, expNeeded: 35095458, bountyV6: 188296.4754, bountyV10: 201746.325, bountyV14: 215196.1746, activeTotal: 135190.0074, eliteExp: 2838, shuraExp: 3783.054 },
+  { level: 171, expNeeded: 36295458, bountyV6: 157510.8642, bountyV10: 168761.725, bountyV14: 180012.5858, activeTotal: 113085.9648, eliteExp: 2843, shuraExp: 3790.219, isEstimated: true },
+  { level: 172, expNeeded: 37495458, bountyV6: 157577.2125, bountyV10: 168832.8125, bountyV14: 180088.4125, activeTotal: 113133.6, eliteExp: 2848, shuraExp: 3796.884, isEstimated: true },
+  { level: 173, expNeeded: 38695458, bountyV6: 157643.5608, bountyV10: 168903.9, bountyV14: 180164.2392, activeTotal: 113181.2352, eliteExp: 2853, shuraExp: 3803.549, isEstimated: true },
+  { level: 174, expNeeded: 39895458, bountyV6: 157709.9091, bountyV10: 168974.9875, bountyV14: 180240.0659, activeTotal: 113228.8704, eliteExp: 2858, shuraExp: 3810.214, isEstimated: true },
+  { level: 175, expNeeded: null, bountyV6: 0, bountyV10: 0, bountyV14: 0, activeTotal: 0, eliteExp: 0, shuraExp: 0, isEstimated: true },
 ]
 
 const LEVEL_MAP = new Map(UPGRADE_LEVEL_DATA.map((row) => [row.level, row]))
@@ -141,7 +148,7 @@ function addDays(date: Date, days: number) {
 
 function validateLevels(currentLevel: number, targetLevel: number) {
   if (!LEVEL_MAP.has(currentLevel) || !LEVEL_MAP.has(targetLevel)) {
-    throw new Error('等级必须在 140 到 170 之间。')
+    throw new Error('等级必须在 140 到 175 之间。')
   }
   if (targetLevel < currentLevel) throw new Error('目标等级不能低于当前等级。')
 }
@@ -174,8 +181,8 @@ export function totalRemainingExperience(currentLevel: number, currentExp: numbe
 function validateConfig(config: UpgradeConfig) {
   validateLevels(config.currentLevel, config.targetLevel)
   validateCurrentExperience(config.currentLevel, config.currentExp)
-  if (!Number.isInteger(config.vipLevel) || config.vipLevel < 10 || config.vipLevel > 15) {
-    throw new Error('V 特权等级必须在 V10 到 V15 之间。')
+  if (!Number.isInteger(config.vipLevel) || config.vipLevel < 0 || config.vipLevel > 15) {
+    throw new Error('V 特权等级必须在 V10 以下、V10—V13 或 V14—V15 三档之内。')
   }
   if (!VALID_STAMINA_BODIES.has(config.staminaBodies)) {
     throw new Error('每日买体必须选择不买、三体、六体或九体。')
@@ -187,7 +194,7 @@ function validateConfig(config: UpgradeConfig) {
 }
 
 function calculateBountyExperience(row: UpgradeLevelRow, vipLevel: number, superKage: boolean) {
-  const vipBounty = vipLevel >= 14 ? row.bountyV14 : row.bountyV10
+  const vipBounty = vipLevel >= 14 ? row.bountyV14 : vipLevel >= 10 ? row.bountyV10 : row.bountyV6
   const baseBounty = row.bountyV10 / 1.2
   return Math.round(vipBounty + (superKage ? baseBounty * 0.3 : 0))
 }
@@ -232,7 +239,7 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
     if (!row) throw new Error(`缺少 ${milestone.fromLevel} 级收益数据。`)
     const eliteStamina = Math.min(averageDailyStamina, DAILY_ELITE_STAMINA_LIMIT)
     const shuraStamina = Math.max(0, averageDailyStamina - DAILY_ELITE_STAMINA_LIMIT)
-    const dungeonExp = (eliteStamina / 10) * row.normalExp * 2 + (shuraStamina / 20) * row.shuraExp
+    const dungeonExp = (eliteStamina / 10) * row.eliteExp + (shuraStamina / 10) * row.shuraExp
     const bountyExp = calculateBountyExperience(row, normalized.vipLevel, normalized.superKage)
     return total + milestone.remaining / (dungeonExp + row.activeTotal + bountyExp)
   }, 0)
@@ -282,7 +289,7 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
     while (level < normalized.targetLevel && eliteRunsToday < DAILY_ELITE_STAMINA_LIMIT / 10 && stamina >= 10) {
       const row = getUpgradeLevelData(level)
       if (!row) throw new Error(`缺少 ${level} 级精英副本经验。`)
-      const reward = row.normalExp * 2
+      const reward = row.eliteExp
       stamina -= 10
       eliteRunsToday += 1
       totals.eliteRuns += 1
@@ -291,11 +298,11 @@ export function simulateUpgrade(config: LegacyUpgradeConfig, maxDays = MAX_SIMUL
       applyExperience(reward, date)
     }
 
-    while (level < normalized.targetLevel && stamina >= 20) {
+    while (level < normalized.targetLevel && stamina >= 10) {
       const row = getUpgradeLevelData(level)
       if (!row) throw new Error(`缺少 ${level} 级修罗副本经验。`)
       const reward = row.shuraExp
-      stamina -= 20
+      stamina -= 10
       shuraRunsToday += 1
       totals.shuraRuns += 1
       totals.dungeonExp += reward
