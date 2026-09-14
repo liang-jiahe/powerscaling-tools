@@ -341,12 +341,11 @@ export function UpgradeCalculator({ resetSignal }: { resetSignal: number }) {
         </summary>
         <div className="upgrade-table-scroll">
           <table>
-            <thead><tr><th>等级</th><th>数据</th><th>升级所需经验</th><th>V10 以下丰饶</th><th>V10—V13 丰饶</th><th>V14—V15 丰饶</th><th>活跃合计</th><th>精英副本</th><th>修罗副本</th></tr></thead>
+            <thead><tr><th>等级</th><th>升级所需经验</th><th>V10 以下丰饶</th><th>V10—V13 丰饶</th><th>V14—V15 丰饶</th><th>活跃合计</th><th>精英副本</th><th>修罗副本</th></tr></thead>
             <tbody>
               {UPGRADE_LEVEL_DATA.map((row) => (
                 <tr key={row.level}>
                   <td><b>{row.level}</b></td>
-                  <td>{row.isEstimated ? '推算' : '参考页'}</td>
                   <td>{row.expNeeded ? formatInteger(row.expNeeded) : '满级'}</td>
                   <td>{formatInteger(row.bountyV6)}</td>
                   <td>{formatInteger(row.bountyV10)}</td>
